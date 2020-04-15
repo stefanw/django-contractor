@@ -1,0 +1,11 @@
+{% load sekizai_tags %}
+
+{% for css_file in instance.get_css %}
+  {% addtoblock "css" %}<link rel="stylesheet" href="{{ css_file }}" type="text/css" media="screen" />{% endaddtoblock %}
+{% endfor %}
+
+{% for js_file in instance.get_js %}
+  {% addtoblock "js" %}<script src="{{ js_file }}" data-assets="{{ path }}"></script>{% endaddtoblock %}
+{% endfor %}
+
+{{ html|safe }}

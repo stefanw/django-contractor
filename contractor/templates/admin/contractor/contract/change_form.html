@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block object-tools-items %}
+{% if original.pk %}
+<li>
+  Webhook <input type="text" readonly value="{{ original.get_webhook_url }}"/>
+</li>
+{% endif %}
+{{ block.super }}
+{% endblock %}
