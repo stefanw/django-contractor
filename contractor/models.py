@@ -82,7 +82,7 @@ class Contract(models.Model):
         return settings.MEDIA_URL + path
 
     def get_file_urls(self, files=None):
-        if not files:
+        if files is None:
             files = self.files
         for line in files.splitlines():
             line = line.strip()

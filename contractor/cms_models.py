@@ -38,7 +38,7 @@ class ContractWorkPlugin(CMSPlugin):
         return self.html
 
     def get_js(self):
-        return self.contract.get_file_urls(self.javascript)
+        return list(self.contract.get_file_urls(self.javascript))
 
     def get_css(self):
-        return self.contract.get_file_urls(self.styles)
+        return list(self.contract.get_file_urls(self.styles))
