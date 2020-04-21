@@ -16,11 +16,19 @@ def extract_html(contract, xpath):
     except Exception as e:
         logger.exception(e)
         return ''
+
+    # Convert relative img paths to full media URLs
+    selections = root.xpath(xpath)
+    for selection in selections:
+        for img in selection.xpath('//img'):
+            src = img.attrib['src']
+            if not src.startswith(('http://', 'https://', '/')):
+                img.attrib['src'] = contract.get_file_url(src)
+
     try:
-        selection = root.xpath(xpath)
         return '\n'.join(
-            for s in selection
             lxml.html.tostring(s, pretty_print=True).decode('utf-8')
+            for s in selections
         )
     except Exception as e:
         logger.exception(e)
