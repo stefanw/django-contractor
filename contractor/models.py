@@ -80,7 +80,7 @@ class Contract(models.Model):
             return filename
 
         path = get_url_path(self.slug, self.version, filename)
-        return settings.CONTRACTOR_URL + path
+        return CONTRACTOR_URL + path
 
     def get_file_urls(self, files=None):
         if files is None:
