@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 CONTRACTOR_DIR = getattr(settings, 'CONTRACTOR_DIR', 'contractor')
+CONTRACTOR_URL = getattr(settings, 'CONTRACTOR_URL', settings.MEDIA_URL)
 
 
 def get_url_path(slug, version, filename):
@@ -52,7 +53,7 @@ class Contract(models.Model):
         return self.name
 
     def get_absolute_url(self, filename=''):
-        return settings.MEDIA_URL + get_url_path(
+        return CONTRACTOR_URL + get_url_path(
             self.slug,
             self.version,
             filename
@@ -79,7 +80,7 @@ class Contract(models.Model):
             return filename
 
         path = get_url_path(self.slug, self.version, filename)
-        return settings.MEDIA_URL + path
+        return settings.CONTRACTOR_URL + path
 
     def get_file_urls(self, files=None):
         if files is None:
