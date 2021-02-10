@@ -1,22 +1,23 @@
+from collections import namedtuple
+from urllib.parse import urlparse, parse_qs, urlunparse
 import uuid
 
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
-from urllib.parse import urlparse, parse_qs, urlunparse
+
+from .utils import is_full_url
 
 
 CONTRACTOR_DIR = getattr(settings, 'CONTRACTOR_DIR', 'contractor')
 CONTRACTOR_URL = getattr(settings, 'CONTRACTOR_URL', settings.MEDIA_URL)
 
+Resource = namedtuple('Resource', ['url', 'attributes', 'filename', 'path'])
+
 
 def get_url_path(slug, version, filename):
     return '/'.join([CONTRACTOR_DIR, slug, str(version), filename])
-
-
-def is_full_url(line):
-    return line.startswith(('https://', 'http://'))
 
 
 class Contract(models.Model):
@@ -66,10 +67,7 @@ class Contract(models.Model):
         return reverse('contractor:webhook', kwargs={'token': self.token})
 
     def get_source_files(self):
-        for line in self.files.splitlines():
-            line = line.strip()
-            if not line:
-                continue
+        for line in self.get_lines():
             if is_full_url(line):
                 continue
             else:
@@ -85,22 +83,27 @@ class Contract(models.Model):
         path = get_url_path(self.slug, self.version, filename)
         return CONTRACTOR_URL + path
 
-    def get_files(self, files=None):
-        if files is None:
-            files = self.files
-        for line in files.splitlines():
+    def get_lines(self):
+        for line in self.files.splitlines():
             line = line.strip()
             if not line:
                 continue
-            
-            file = self.get_file_url(line)
-            parsed = urlparse(file)
-            url = urlunparse(parsed._replace(query='')) # remove query
-            
-            query = parse_qs(parsed.query, keep_blank_values=True) # { key: [value] }
-            attributes = { key: query[key][0] or True for key in query }
+            yield line
 
-            yield {'url': url, 'attributes': attributes}
+    def get_resources(self, filter_files=None):
+        for line in self.get_lines():
+            if filter_files is not None and not line.startswith(filter_files):
+                continue
+            url = self.get_file_url(line)
+            path = None
+            if not is_full_url(line):
+                path = self.get_file_path(line)
+            parsed = urlparse(url)
+            url = urlunparse(parsed._replace(query=''))  # remove query
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            attributes = {key: query[key][0] or True for key in query}
+
+            yield Resource(url, attributes, line, path)
 
 
 try:

@@ -38,7 +38,11 @@ class ContractWorkPlugin(CMSPlugin):
         return self.html
 
     def get_js(self):
-        return list(self.contract.get_files(self.javascript))
+        return list(self.contract.get_resources(get_filter(self.javascript)))
 
     def get_css(self):
-        return list(self.contract.get_files(self.styles))
+        return list(self.contract.get_resources(get_filter(self.styles)))
+
+
+def get_filter(files):
+    return tuple([x for x in files.splitlines() if x])
