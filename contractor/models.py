@@ -71,7 +71,8 @@ class Contract(models.Model):
             if is_full_url(line):
                 continue
             else:
-                yield (line, self.source_url + line)
+                filename = urlparse(line).path
+                yield (filename, self.source_url + filename)
 
     def get_file_path(self, filename=''):
         return get_url_path(self.slug, self.version, filename)
