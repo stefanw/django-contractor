@@ -2,13 +2,13 @@
 
 {% for css_file in instance.get_css %}
   {% addtoblock "css" %}
-    <link rel="stylesheet" href="{{ css_file.url }}" type="text/css" media="{{ css_file.attributes.media|default:'screen' }}"{% if css_file.attributes.integrity %} integrity="{{ css_file.attributes.integrity }}"{% endif %} />
+    <link rel="stylesheet" href="{{ css_file.url }}" type="text/css" media="{{ css_file.attributes.media|default:'screen' }}"{% if css_file.attributes.integrity %} integrity="{{ css_file.attributes.integrity }}" crossorigin="anonymous"{% endif %} />
   {% endaddtoblock %}
 {% endfor %}
 
 {% for js_file in instance.get_js %}
   {% addtoblock "js" %}
-    <script type="{{ js_file.attributes.type|default:'text/javascript' }}" src="{{ js_file.url }}" data-assets="{{ path }}"{% if js_file.attributes.nomodule %} nomodule{% endif %}{% if js_file.attributes.async %} async{% endif %}{% if js_file.attributes.integrity %} integrity="{{ js_file.attributes.integrity }}"{% endif %}></script>
+    <script type="{{ js_file.attributes.type|default:'text/javascript' }}" src="{{ js_file.url }}" data-assets="{{ path }}"{% if js_file.attributes.nomodule %} nomodule{% endif %}{% if js_file.attributes.async %} async{% endif %}{% if js_file.attributes.integrity %} integrity="{{ js_file.attributes.integrity }}" crossorigin="anonymous"{% endif %}></script>
   {% endaddtoblock %}
 {% endfor %}
 
