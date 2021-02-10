@@ -18,7 +18,7 @@ class ContractAdmin(admin.ModelAdmin):
     save_on_top = True
     ordering = ('-updated',)
     date_hierarchy = 'updated'
-    actions = ['manual_update']
+    actions = ['manual_update', 'apply_subresource_integrity']
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -35,6 +35,12 @@ class ContractAdmin(admin.ModelAdmin):
             fetch_contract_result.delay(contract.pk)
 
         self.message_user(request, "Contract update triggered.")
+
+    def apply_subresource_integrity(self, request, queryset):
+        from .tasks import apply_subresource_integrity
+
+        for contract in queryset:
+            apply_subresource_integrity.delay(contract.pk)
 
 
 admin.site.register(Contract, ContractAdmin)
