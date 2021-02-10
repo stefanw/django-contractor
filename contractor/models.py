@@ -4,6 +4,8 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
+from urllib.parse import urlparse, parse_qs, urlunparse
+
 
 CONTRACTOR_DIR = getattr(settings, 'CONTRACTOR_DIR', 'contractor')
 CONTRACTOR_URL = getattr(settings, 'CONTRACTOR_URL', settings.MEDIA_URL)
@@ -82,14 +84,22 @@ class Contract(models.Model):
         path = get_url_path(self.slug, self.version, filename)
         return CONTRACTOR_URL + path
 
-    def get_file_urls(self, files=None):
+    def get_files(self, files=None):
         if files is None:
             files = self.files
         for line in files.splitlines():
             line = line.strip()
             if not line:
                 continue
-            yield self.get_file_url(line)
+            
+            file = self.get_file_url(line)
+            parsed = urlparse(file)
+            url = urlunparse(parsed._replace(query='')) # remove query
+            
+            query = parse_qs(parsed.query, keep_blank_values=True) # { key: [value] }
+            attributes = { key: query[key][0] or True for key in query }
+
+            yield {'url': url, 'attributes': attributes}
 
 
 try:

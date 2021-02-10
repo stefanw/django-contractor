@@ -1,11 +1,15 @@
 {% load sekizai_tags %}
 
 {% for css_file in instance.get_css %}
-  {% addtoblock "css" %}<link rel="stylesheet" href="{{ css_file }}" type="text/css" media="screen" />{% endaddtoblock %}
+  {% addtoblock "css" %}
+    <link rel="stylesheet" href="{{ css_file.url }}" type="text/css" media="{{ css_file.attributes.media|default:'screen' }}" />
+  {% endaddtoblock %}
 {% endfor %}
 
 {% for js_file in instance.get_js %}
-  {% addtoblock "js" %}<script src="{{ js_file }}" data-assets="{{ path }}"></script>{% endaddtoblock %}
+  {% addtoblock "js" %}
+    <script type="{{ js_file.attributes.type|default:'text/javascript' }}" src="{{ js_file.url }}" data-assets="{{ path }}"{% if js_file.attributes.nomodule %} nomodule{% endif %}{% if js_file.attributes.async %} async{% endif %}></script>
+  {% endaddtoblock %}
 {% endfor %}
 
 {{ html|safe }}
