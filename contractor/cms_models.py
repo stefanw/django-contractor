@@ -2,6 +2,7 @@ from django.db import models
 
 from cms.models.pluginmodel import CMSPlugin
 
+
 class ContractWorkPlugin(CMSPlugin):
     """
     CMS Plugin for displaying latest investigations
@@ -38,7 +39,6 @@ class ContractWorkPlugin(CMSPlugin):
 
     def get_js(self):
         return list(self.contract.get_files(self.javascript))
-
 
     def get_css(self):
         return list(self.contract.get_files(self.styles))

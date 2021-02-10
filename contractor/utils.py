@@ -8,7 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 def extract_html(contract, xpath):
-    filename, xpath = xpath.split('#', 1)
+    if '#' not in xpath:
+        filename = 'index.html'
+    else:
+        filename, xpath = xpath.split('#', 1)
+
     path = contract.get_file_path(filename)
     try:
         content = default_storage.open(path).read()
@@ -33,3 +37,5 @@ def extract_html(contract, xpath):
     except Exception as e:
         logger.exception(e)
     return ''
+
+compute_subresource_integrity()
