@@ -96,6 +96,7 @@ class Contract(models.Model):
                 continue
             url = self.get_file_url(line)
             path = None
+            filename = urlparse(line).path
             if not is_full_url(line):
                 path = self.get_file_path(line)
             parsed = urlparse(url)
@@ -103,7 +104,7 @@ class Contract(models.Model):
             query = parse_qs(parsed.query, keep_blank_values=True)
             attributes = {key: query[key][0] or True for key in query}
 
-            yield Resource(url, attributes, line, path)
+            yield Resource(url, attributes, filename, path)
 
 
 try:
