@@ -7,7 +7,8 @@ from .models import Contract
 class ContractAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'created', 'updated',
-        'created_by', 'updated_by', 'version'
+        'created_by', 'updated_by', 'version',
+        'webhook_active'
     )
     readonly_fields = (
         'created', 'updated', 'created_by', 'updated_by',

@@ -39,6 +39,7 @@ class Contract(models.Model):
         on_delete=models.SET_NULL
     )
     token = models.UUIDField(default=uuid.uuid4)
+    webhook_active = models.BooleanField(default=False)
 
     version = models.IntegerField(default=0)
     source_url = models.URLField()

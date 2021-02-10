@@ -10,7 +10,7 @@ from .tasks import fetch_contract_result
 @require_POST
 def webhook(request, token):
     try:
-        contract = Contract.objects.get(token=token)
+        contract = Contract.objects.get(token=token, webhook_active=True)
     except Contract.DoesNotExist:
         return JsonResponse({})
 
