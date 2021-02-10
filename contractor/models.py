@@ -99,7 +99,7 @@ class Contract(models.Model):
             path = None
             filename = urlparse(line).path
             if not is_full_url(line):
-                path = self.get_file_path(line)
+                path = self.get_file_path(filename)
             parsed = urlparse(url)
             url = urlunparse(parsed._replace(query=''))  # remove query
             query = parse_qs(parsed.query, keep_blank_values=True)
