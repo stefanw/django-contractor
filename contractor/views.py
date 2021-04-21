@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
@@ -20,3 +21,9 @@ def webhook(request, token):
     fetch_contract_result.delay(contract.id)
 
     return JsonResponse({})
+
+
+def redirect_current(request, slug, path):
+    contract = get_object_or_404(Contract, slug=slug)
+    url = contract.get_absolute_url(filename=path)
+    return redirect(url)
