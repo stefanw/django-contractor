@@ -31,6 +31,8 @@ def extract_html(contract, xpath):
     selections = root.xpath(xpath)
     for selection in selections:
         for img in selection.xpath('//img'):
+            if 'src' not in img.attrib:
+                continue
             src = img.attrib['src']
             if not src.startswith(('http://', 'https://', '/')):
                 img.attrib['src'] = contract.get_file_url(src)
