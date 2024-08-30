@@ -1,6 +1,6 @@
 [project]
 name = "django-contractor"
-version = "0.0.7"
+version = "0.0.8"
 description = "Fetch media files that were build elsewhere"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -20,6 +20,3 @@ classifiers = [
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools]
-packages = ["contractor"]
