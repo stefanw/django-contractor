@@ -1,6 +1,8 @@
 [project]
-name = "contractor"
+name = "django-contractor"
+version = "0.0.7"
 description = "Fetch media files that were build elsewhere"
+readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 classifiers = [
@@ -14,7 +16,6 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Topic :: Utilities",
 ]
-dynamic = ["version"]
 
 [build-system]
 requires = ["setuptools"]
